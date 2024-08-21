@@ -111,6 +111,19 @@
             }
         };
 
+        function enviarDados(nome, telefone) {
+            // Referência ao Realtime Database
+            const dbRef = ref(database, 'usuarios/' + nome.replace(/\s+/g, '_'));
+            set(dbRef, {
+                nome: nome,
+                telefone: telefone
+            }).then(() => {
+                console.log("Dados enviados com sucesso!");
+            }).catch((error) => {
+                console.error("Erro ao enviar dados: ", error);
+            });
+        }
+
         function enviar() {
             const nome = document.getElementById('nome').value;
             const telefone = document.getElementById('telefone').value;
@@ -138,6 +151,9 @@
             localStorage.setItem('nome', nome);
             localStorage.setItem('telefone', telefone);
 
+            // Enviar dados para o Firebase
+            enviarDados(nome, telefone);
+
             // Simulação de envio de dados para um servidor
             setTimeout(() => {
                 // Mostrar mensagem de sucesso
@@ -152,6 +168,7 @@
         // Importar as funções necessárias do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
         // Configuração do Firebase
         const firebaseConfig = {
@@ -167,6 +184,7 @@
         // Inicializar o Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
+        const database = getDatabase(app);
     </script>
 </body>
 </html>
